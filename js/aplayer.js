@@ -1,5 +1,12 @@
 window.onload = function () {
-	document.getElementsByClassName("aplayer-lrc")[0].remove();
+	var flag = true;
+	while(flag){
+		if (document.getElementsByClassName("aplayer-lrc").length!=0) {
+			document.getElementsByClassName("aplayer-lrc")[0].remove();
+			flag = false;
+		}
+	}
+	
 }
 
 

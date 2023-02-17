@@ -1,0 +1,696 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/favicon-16x16.png?v=2.7.0" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/favicon-32x32.png?v=2.7.0" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=2.7.0" sizes="180x180"><meta name="description" content="MyBatis 框架初识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MyBatis数据库框架">
+<meta property="og:url" content="https://worldmeqc.top/2022/09/20/MyBatis%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A1%86%E6%9E%B6/index.html">
+<meta property="og:site_name" content="QC の 小窝">
+<meta property="og:description" content="MyBatis 框架初识">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://worldmeqc.top/2022/09/20/MyBatis%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A1%86%E6%9E%B6/MyBatis_logo.png">
+<meta property="article:published_time" content="2022-09-20T05:45:22.000Z">
+<meta property="article:modified_time" content="2022-10-26T07:21:36.190Z">
+<meta property="article:author" content="WorldmeQC">
+<meta property="article:tag" content="JavaWeb">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="MyBatis">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://worldmeqc.top/2022/09/20/MyBatis%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A1%86%E6%9E%B6/MyBatis_logo.png"><title>MyBatis数据库框架 | QC の 小窝</title><link ref="canonical" href="https://worldmeqc.top/2022/09/20/MyBatis%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A1%86%E6%9E%B6/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/css/share.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: ["google","bing","baidu"],
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"ocean","wordWrap":true},
+  reward: false,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: {"avoidBanner":false},
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+  aplayer: {"enable":true,"theme":null,"id":7551302646,"autoplay":true,"server":"netease","type":"playlist","fixed":"true","mini":false,"order":"random","preload":"auto","listFolded":false,"lrcType":1},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 6.3.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">归档</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/about/"><span class="header-nav-menu-item__icon"><i class="fas fa-fingerprint"></i></span><span class="header-nav-menu-item__text">关于</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">QC の 小窝</div><div class="header-banner-info__subtitle">玩玩游戏，写写代码，热爱生活</div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-arrow-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">MyBatis数据库框架</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2022-09-20</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2022-10-26</span></span></div></header><div class="post-body">
+        <h1 id="MyBatis-框架初识"   >
+          <a href="#MyBatis-框架初识" class="heading-link"><i class="fas fa-link"></i></a><a href="#MyBatis-框架初识" class="headerlink" title="MyBatis 框架初识"></a>MyBatis 框架初识</h1>
+      <img src="/2022/09/20/MyBatis%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A1%86%E6%9E%B6/MyBatis_logo.png" class="" title="MyBatis">
+
+<span id="more"></span>
+
+
+        <h2 id="什么是-MyBatis-？"   >
+          <a href="#什么是-MyBatis-？" class="heading-link"><i class="fas fa-link"></i></a><a href="#什么是-MyBatis-？" class="headerlink" title="什么是 MyBatis ？"></a>什么是 MyBatis ？</h2>
+      <ul>
+<li>MyBatis 是一款优秀的持久层框架，它支持自定义 SQL、存储过程以及高级映射。</li>
+<li>MyBatis 免除了几乎所有的 JDBC 代码以及设置参数和获取结果集的工作。</li>
+<li>MyBatis 可以通过简单的 XML 或注解来配置和映射原始类型、接口和 Java POJO（Plain Old Java Objects，普通老式 Java 对象）为数据库中的记录。</li>
+<li>中文文档：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://mybatis.net.cn/index.html" >MyBatis 中文网</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></li>
+<li>GitHub：<span class="exturl"><a class="exturl__link"   target="_blank" rel="noopener" href="https://github.com/mybatis/mybatis-3" >https://github.com/mybatis/mybatis-3</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></li>
+</ul>
+
+        <h2 id="为什么需要使用-MyBatis"   >
+          <a href="#为什么需要使用-MyBatis" class="heading-link"><i class="fas fa-link"></i></a><a href="#为什么需要使用-MyBatis" class="headerlink" title="为什么需要使用 MyBatis"></a>为什么需要使用 MyBatis</h2>
+      <ul>
+<li>简单易学：本身就很小且简单。没有任何第三方依赖，最简单安装只要两个jar文件+配置几个sql映射文件。易于学习，易于使用。通过文档和源代码，可以比较完全的掌握它的设计思路和实现。</li>
+<li>灵活：mybatis不会对应用程序或者数据库的现有设计强加任何影响。 sql写在xml里，便于统一管理和优化。通过sql语句可以满足操作数据库的所有需求。</li>
+<li>解除sql与程序代码的耦合：通过提供DAO层，将业务逻辑和数据访问逻辑分离，使系统的设计更清晰，更易维护，更易单元测试。sql和代码的分离，提高了可维护性。</li>
+<li>提供映射标签，支持对象与数据库的ORM字段关系映射。</li>
+<li>提供对象关系映射标签，支持对象关系组建维护。</li>
+<li>提供xml标签，支持编写动态sql。</li>
+</ul>
+
+        <h2 id="持久化"   >
+          <a href="#持久化" class="heading-link"><i class="fas fa-link"></i></a><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h2>
+      <ul>
+<li>持久化是将程序数据在持久状态和瞬时状态间转换的机制<ul>
+<li>就是把内存中的数据保存到可永久保存的存储设备中。主要应用就是将内存中的对象存储在数据库中。</li>
+<li>JDBC、文件IO就是一种持久化的机制。</li>
+</ul>
+</li>
+<li>为什么需要持久化服务？<ul>
+<li>内存断电后数据会丢失，但是我们不希望一些数据丢失，但是却无法保证内存永远不断电。</li>
+<li>内存成本比较高，就算数据不需要永久保存，也会因为内存的容量限制而不能一直放在内存中，需要持久化到外存。</li>
+</ul>
+</li>
+</ul>
+
+        <h2 id="持久层"   >
+          <a href="#持久层" class="heading-link"><i class="fas fa-link"></i></a><a href="#持久层" class="headerlink" title="持久层"></a>持久层</h2>
+      <ul>
+<li>持久层就是完成持久化工作的代码块，一般为DAO层（Data Access Object 数据访问对象）。</li>
+<li>持久化的实现过程大多都是通过各种关系数据库来完成的。</li>
+<li>总的来说，持久层就是用来操作数据库的。</li>
+</ul>
+
+        <h1 id="MyBatis-的使用"   >
+          <a href="#MyBatis-的使用" class="heading-link"><i class="fas fa-link"></i></a><a href="#MyBatis-的使用" class="headerlink" title="MyBatis 的使用"></a>MyBatis 的使用</h1>
+      
+        <h2 id="导入-MyBatis-（Maven）"   >
+          <a href="#导入-MyBatis-（Maven）" class="heading-link"><i class="fas fa-link"></i></a><a href="#导入-MyBatis-（Maven）" class="headerlink" title="导入 MyBatis （Maven）"></a>导入 MyBatis （Maven）</h2>
+      <figure class="highlight xml"><div class="table-container"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.mybatis<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.5.9<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 另外还需要一个MySQL的连接驱动包 --&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+
+        <h2 id="编写-MyBatis-核心配置文件"   >
+          <a href="#编写-MyBatis-核心配置文件" class="heading-link"><i class="fas fa-link"></i></a><a href="#编写-MyBatis-核心配置文件" class="headerlink" title="编写 MyBatis 核心配置文件"></a>编写 MyBatis 核心配置文件</h2>
+      <p>mybatis-config.xml</p>
+<figure class="highlight xml"><div class="table-container"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span> ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">configuration</span> <span class="keyword">PUBLIC</span> <span class="string">&quot;-//mybatis.org//DTD Config 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta"><span class="string">&quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">environments</span> <span class="attr">default</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">environment</span> <span class="attr">id</span>=<span class="string">&quot;development&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">transactionManager</span> <span class="attr">type</span>=<span class="string">&quot;JDBC&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">dataSource</span> <span class="attr">type</span>=<span class="string">&quot;POOLED&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;driver&quot;</span> <span class="attr">value</span>=<span class="string">&quot;com.mysql.cj.jdbc.Driver&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;url&quot;</span> <span class="attr">value</span>=<span class="string">&quot;jdbc:mysql://localhost:3306/mybatis?useSSL=true<span class="symbol">&amp;amp;</span>serverTimezone=GMT%2B8<span class="symbol">&amp;amp;</span>characterEncoding=utf8&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">value</span>=<span class="string">&quot;root&quot;</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">value</span>=<span class="string">&quot;123456&quot;</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">dataSource</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">environment</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">environments</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mappers</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mapper</span> <span class="attr">resource</span>=<span class="string">&quot;com/worldmeqc/dao/userMapper.xml&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">mappers</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+
+        <h2 id="编写-MyBatis-工具类"   >
+          <a href="#编写-MyBatis-工具类" class="heading-link"><i class="fas fa-link"></i></a><a href="#编写-MyBatis-工具类" class="headerlink" title="编写 MyBatis 工具类"></a>编写 MyBatis 工具类</h2>
+      <figure class="highlight java"><div class="table-container"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyBatisUtil</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SqlSessionFactory sqlSessionFactory;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">InputStream</span> <span class="variable">inputStream</span> <span class="operator">=</span> Resources.getResourceAsStream(<span class="string">&quot;mybatis-config.xml&quot;</span>);</span><br><span class="line">            sqlSessionFactory = <span class="keyword">new</span> <span class="title class_">SqlSessionFactoryBuilder</span>().build(inputStream);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//获取SqlSession连接</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> SqlSession <span class="title function_">getSession</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> sqlSessionFactory.openSession();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+
+        <h2 id="创建实体类"   >
+          <a href="#创建实体类" class="heading-link"><i class="fas fa-link"></i></a><a href="#创建实体类" class="headerlink" title="创建实体类"></a>创建实体类</h2>
+      <figure class="highlight java"><div class="table-container"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Data</span> <span class="comment">//lombok</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line">    <span class="keyword">private</span> String password;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+
+        <h2 id="编写Mapper接口"   >
+          <a href="#编写Mapper接口" class="heading-link"><i class="fas fa-link"></i></a><a href="#编写Mapper接口" class="headerlink" title="编写Mapper接口"></a>编写Mapper接口</h2>
+      <figure class="highlight java"><div class="table-container"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserMapper</span> &#123;</span><br><span class="line">    List&lt;User&gt; <span class="title function_">queryAll</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+
+        <h2 id="编写UserMapper-xml配置文件"   >
+          <a href="#编写UserMapper-xml配置文件" class="heading-link"><i class="fas fa-link"></i></a><a href="#编写UserMapper-xml配置文件" class="headerlink" title="编写UserMapper.xml配置文件"></a>编写UserMapper.xml配置文件</h2>
+      <figure class="highlight xml"><div class="table-container"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span> ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">mapper</span></span></span><br><span class="line"><span class="meta"><span class="keyword">PUBLIC</span> <span class="string">&quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta"><span class="string">&quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- namespace必须与Mapper接口类对应 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">&quot;com.worldmeqc.mapper.UserMapper&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;queryAll&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;com.worldmeqc.pojo.User&quot;</span>&gt;</span></span><br><span class="line">        select * from user</span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+
+        <h2 id="测试类"   >
+          <a href="#测试类" class="heading-link"><i class="fas fa-link"></i></a><a href="#测试类" class="headerlink" title="测试类"></a>测试类</h2>
+      <p>junit测试</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyTest</span> &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">testQueryAll</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">SqlSession</span> <span class="variable">session</span> <span class="operator">=</span> MyBatisUtil.getSession();</span><br><span class="line">        <span class="type">UserMapper</span> <span class="variable">mapper</span> <span class="operator">=</span> session.getMapper(UserMapper.class);</span><br><span class="line">        List&lt;User&gt; users = mapper.queryAll();</span><br><span class="line">        <span class="keyword">for</span>(User user : users) &#123;</span><br><span class="line">            System.out.println(user);</span><br><span class="line">        &#125;</span><br><span class="line">        session.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+
+        <h2 id="可能出现的问题"   >
+          <a href="#可能出现的问题" class="heading-link"><i class="fas fa-link"></i></a><a href="#可能出现的问题" class="headerlink" title="可能出现的问题"></a>可能出现的问题</h2>
+      
+        <h3 id="找不到Mapper-xml文件"   >
+          <a href="#找不到Mapper-xml文件" class="heading-link"><i class="fas fa-link"></i></a><a href="#找不到Mapper-xml文件" class="headerlink" title="找不到Mapper.xml文件"></a>找不到Mapper.xml文件</h3>
+      <p>如果我们的UserMapper.xml文件是放在mapper包中，与Mapper接口类放在一起的话，Maven会将xml文件过滤掉，在生成的代码包中就找不到xml文件了，我们可以在pom.xml文件中添加以下代码解决问题</p>
+<figure class="highlight xml"><div class="table-container"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 资源文件的位置 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">resource</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">directory</span>&gt;</span>src/main/java<span class="tag">&lt;/<span class="name">directory</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">includes</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">include</span>&gt;</span>**/*<span class="tag">&lt;/<span class="name">include</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">includes</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">resource</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">resource</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">directory</span>&gt;</span>src/main/resources/<span class="tag">&lt;/<span class="name">directory</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">includes</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">include</span>&gt;</span>**/*<span class="tag">&lt;/<span class="name">include</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">includes</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">resource</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+
+
+
+        <h1 id="几个顶级元素标签"   >
+          <a href="#几个顶级元素标签" class="heading-link"><i class="fas fa-link"></i></a><a href="#几个顶级元素标签" class="headerlink" title="几个顶级元素标签"></a>几个顶级元素标签</h1>
+      
+        <h2 id="select、insert、update、delete标签"   >
+          <a href="#select、insert、update、delete标签" class="heading-link"><i class="fas fa-link"></i></a><a href="#select、insert、update、delete标签" class="headerlink" title="select、insert、update、delete标签"></a>select、insert、update、delete标签</h2>
+      <p>其中有很多属性可以详细配置每一条SQL语句</p>
+<ul>
+<li><p>id</p>
+<ul>
+<li>命名空间中唯一的标识符，并且与接口中的方法名对应</li>
+</ul>
+</li>
+<li><p>parameterType</p>
+<ul>
+<li>传入SQL语句的参数类型，如int</li>
+</ul>
+</li>
+<li><p>resultType</p>
+<ul>
+<li>SQL语句返回值类型（完整的类名或者别名），如果返回集合应设置为集合中存放的元素类型。</li>
+</ul>
+</li>
+<li><p>resultMap</p>
+<ul>
+<li>结果映射，可以解决实体属性名与列名不一致的问题</li>
+<li>可以在外部配置一个resultMap，然后在引用它的语句中设置resultMap属性就行</li>
+</ul>
+</li>
+<li><p>flushCache</p>
+<ul>
+<li>设置为true时，只要语句被调用了，本地缓存和二级缓存会被清空</li>
+<li>默认值为false</li>
+</ul>
+</li>
+<li><p>useCache</p>
+<ul>
+<li>设置为true时，本条语句的结果会被二级缓存储存</li>
+<li>默认值 对于select为true，其他为false</li>
+</ul>
+</li>
+<li><p>useGeneratedKeys（适用于 insert 和 update ）</p>
+<ul>
+<li>设置为true时，会使用JDBC的getGeneratedKeys方法取出由数据库内部生成的主键</li>
+<li>默认值为false</li>
+</ul>
+</li>
+<li><p>keyProperty（适用于 insert 和 update ）</p>
+<ul>
+<li>指定能够唯一识别对象的属性，Mybatis会使用getGeneratedKeys 的返回值或 insert 语句的 selectKey 子元素设置它的值</li>
+<li>默认值未设置，如果生成列不止一个，可以用逗号隔开</li>
+</ul>
+</li>
+</ul>
+
+        <h2 id="sql标签"   >
+          <a href="#sql标签" class="heading-link"><i class="fas fa-link"></i></a><a href="#sql标签" class="headerlink" title="sql标签"></a>sql标签</h2>
+      <p>这个元素可以用来定义可以重用的SQL代码片段，方便在其他语句中使用。其中的参数可以在加载的时候确定下来，还可以在不同的使用中定义不同的参数值。</p>
+<figure class="highlight xml"><div class="table-container"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">sql</span> <span class="attr">id</span>=<span class="string">&quot;userColumns&quot;</span>&gt;</span></span><br><span class="line">    $&#123;alias&#125;.id,$&#123;alias&#125;.username,$&#123;alias&#125;.password</span><br><span class="line"><span class="tag">&lt;/<span class="name">sql</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+<p>上面的代码块可以在其他地方使用</p>
+<figure class="highlight xml"><div class="table-container"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectUsers&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;map&quot;</span>&gt;</span></span><br><span class="line">    select</span><br><span class="line">    	<span class="tag">&lt;<span class="name">include</span> <span class="attr">refid</span>=<span class="string">&quot;userColumns&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;alias&quot;</span> <span class="attr">value</span>=<span class="string">&quot;t1&quot;</span>/&gt;</span><span class="tag">&lt;/<span class="name">include</span>&gt;</span>,</span><br><span class="line">    	<span class="tag">&lt;<span class="name">include</span> <span class="attr">refid</span>=<span class="string">&quot;userColumns&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;alias&quot;</span> <span class="attr">value</span>=<span class="string">&quot;t2&quot;</span>/&gt;</span><span class="tag">&lt;/<span class="name">include</span>&gt;</span></span><br><span class="line">	from some_table t1</span><br><span class="line">    cross join some_table t2</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+
+        <h2 id="resultMap标签"   >
+          <a href="#resultMap标签" class="heading-link"><i class="fas fa-link"></i></a><a href="#resultMap标签" class="headerlink" title="resultMap标签"></a>resultMap标签</h2>
+      <p>这个标签是MyBatis中最重要的最强大的元素标签：结果映射</p>
+<p>示例：</p>
+<p>一个简单的实体类</p>
+<figure class="highlight java"><div class="table-container"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.someapp.model;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line">    <span class="keyword">private</span> String hashedPassword;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getId</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setId</span><span class="params">(<span class="type">int</span> id)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.id = id;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getUsername</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> username;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUsername</span><span class="params">(String username)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.username = username;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getHashedPassword</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> hashedPassword;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setHashedPassword</span><span class="params">(String hashedPassword)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.hashedPassword = hashedPassword;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+<p>基于JavaBean的规范，上面的类有三个属性，分别是id，username，hashedPassword</p>
+<p>这样的一个JavaBean可以被映射到ResultSet</p>
+<figure class="highlight xml"><div class="table-container"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectUsers&quot;</span> <span class="attr">resultType</span>=<span class="string">&quot;com.someapp.model.User&quot;</span>&gt;</span></span><br><span class="line">    select id, username, hashedPassword</span><br><span class="line">    from some_table</span><br><span class="line">    where id = #&#123;id&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+<p>我们可以使用resultMap来解决列名不匹配的问题，比如上述resultMap修改为</p>
+<figure class="highlight xml"><div class="table-container"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">id</span>=<span class="string">&quot;userResultMap&quot;</span> <span class="attr">type</span>=<span class="string">&quot;User&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span> <span class="attr">property</span>=<span class="string">&quot;id&quot;</span> <span class="attr">column</span>=<span class="string">&quot;user_id&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">&quot;username&quot;</span> <span class="attr">column</span>=<span class="string">&quot;user_name&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">&quot;password&quot;</span> <span class="attr">column</span>=<span class="string">&quot;hashed_password&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+<p>然后在引用它的语句中设置resultMap属性就好了（注意去掉resultType属性）</p>
+<figure class="highlight xml"><div class="table-container"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">&quot;selectUsers&quot;</span> <span class="attr">resultMap</span>=<span class="string">&quot;userResultMap&quot;</span>&gt;</span></span><br><span class="line">    select user_id, user_name, hashed_password</span><br><span class="line">    from some_table</span><br><span class="line">    where id = #&#123;id&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></div></figure>
+
+<p>下面是一些resultMap的元素标签</p>
+<ul>
+<li>id<ul>
+<li>一个ID结果，标记出作为ID的结果可以帮助提高整体性能</li>
+</ul>
+</li>
+<li>result<ul>
+<li>注入到字段或JavaBean中属性的普通结果</li>
+</ul>
+</li>
+<li>association<ul>
+<li>一个复杂类型的关联，许多结果会包装成这种类型</li>
+<li>嵌套的结果映射：关联可以是resultMap元素或是对其他结果映射的引用</li>
+</ul>
+</li>
+<li>collection<ul>
+<li>一个复杂类型的集合</li>
+<li>嵌套的结果映射：关联可以是resultMap元素或是对其他结果映射的引用</li>
+</ul>
+</li>
+<li>discriminator<ul>
+<li>case 基于某些值的结果映射<ul>
+<li>嵌套的结果映射：case也是一个结果映射所以具有相同的结构和元素或是对其他结果映射的引用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>constructor<ul>
+<li>用于在实例化类时，注入结果到构造方法中</li>
+<li>idArg：ID参数，标记出作为ID的结果</li>
+<li>arg：将被注入到构造方法的一个普通结果</li>
+</ul>
+</li>
+</ul>
+
+        <h2 id="resultMap的元素标签的属性"   >
+          <a href="#resultMap的元素标签的属性" class="heading-link"><i class="fas fa-link"></i></a><a href="#resultMap的元素标签的属性" class="headerlink" title="resultMap的元素标签的属性"></a>resultMap的元素标签的属性</h2>
+      <ul>
+<li>id &amp; result<ul>
+<li>这是结果映射的基础，会将一个列的值映射到一个简单数据类型的属性或字段</li>
+<li>id对应的属性会被标记为对象的标识符，在比较对象实例时使用，可以提高性能</li>
+<li>属性<ul>
+<li>property：映射到列结果的字段或属性，优先寻找JavaBean中的属性</li>
+<li>column：数据库中的列名或是列的别名</li>
+<li>javaType：一个Java类的全限定名或是类型别名（内置）</li>
+<li>jdbcType：JDBC类型，只需要在可能执行插入更新删除且允许空值的列上指定JDBC类型，这是JDBC的要求</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>内置的jdbcType</li>
+</ul>
+<div class="table-container"><table>
+<thead>
+<tr>
+<th align="center"><strong>BIT</strong></th>
+<th align="center"><strong>FLOAT</strong></th>
+<th align="center"><strong>CHAR</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>TIMESTAMP</strong></td>
+<td align="center"><strong>OTHER</strong></td>
+<td align="center"><strong>UNDEFINED</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>TINYINT</strong></td>
+<td align="center"><strong>REAL</strong></td>
+<td align="center"><strong>VARCHAR</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>BINARY</strong></td>
+<td align="center"><strong>BLOB</strong></td>
+<td align="center"><strong>NVARCHAR</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>SMALLINT</strong></td>
+<td align="center"><strong>DOUBLE</strong></td>
+<td align="center"><strong>LONGVARCHAR</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>VARBINARY</strong></td>
+<td align="center"><strong>CLOB</strong></td>
+<td align="center"><strong>NCHAR</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>INTEGER</strong></td>
+<td align="center"><strong>NUMERIC</strong></td>
+<td align="center"><strong>DATE</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>LONGVARBINARY</strong></td>
+<td align="center"><strong>BOOLEAN</strong></td>
+<td align="center"><strong>NVLOB</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>BIGINT</strong></td>
+<td align="center"><strong>DECIMAL</strong></td>
+<td align="center"><strong>TIME</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>NULL</strong></td>
+<td align="center"><strong>CURSOR</strong></td>
+<td align="center"><strong>ARRAY</strong></td>
+</tr>
+</tbody></table></div>
+<ul>
+<li>association<ul>
+<li>关联元素主要处理一对一类型的关系。比如一篇博客有一个作者</li>
+</ul>
+</li>
+</ul>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 我可是有底线的 (▼ヘ▼#) ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="https://worldmeqc.top">WorldmeQC</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="https://worldmeqc.top/2022/09/20/MyBatis%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A1%86%E6%9E%B6/">https://worldmeqc.top/2022/09/20/MyBatis%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A1%86%E6%9E%B6/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://worldmeqc.top/tags/JavaWeb/">JavaWeb</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://worldmeqc.top/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://worldmeqc.top/tags/MyBatis/">MyBatis</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://worldmeqc.top/tags/Java/">Java</a></span></div><div class="post-share"><div class="social-share" data-sites="qq, wechat, weibo">觉得不错？分享本篇文章吧！</div></div><nav class="post-paginator paginator"><div class="paginator-next"><a class="paginator-next__link" href="/2022/08/14/JQuery%E7%9A%84%E4%BD%BF%E7%94%A8/"><span class="paginator-prev__text">jQuery的使用</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MyBatis-%E6%A1%86%E6%9E%B6%E5%88%9D%E8%AF%86"><span class="toc-number">1.</span> <span class="toc-text">
+          MyBatis 框架初识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-MyBatis-%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">
+          什么是 MyBatis ？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E4%BD%BF%E7%94%A8-MyBatis"><span class="toc-number">1.2.</span> <span class="toc-text">
+          为什么需要使用 MyBatis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96"><span class="toc-number">1.3.</span> <span class="toc-text">
+          持久化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E5%B1%82"><span class="toc-number">1.4.</span> <span class="toc-text">
+          持久层</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MyBatis-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">
+          MyBatis 的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%BC%E5%85%A5-MyBatis-%EF%BC%88Maven%EF%BC%89"><span class="toc-number">2.1.</span> <span class="toc-text">
+          导入 MyBatis （Maven）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E5%86%99-MyBatis-%E6%A0%B8%E5%BF%83%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">2.2.</span> <span class="toc-text">
+          编写 MyBatis 核心配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E5%86%99-MyBatis-%E5%B7%A5%E5%85%B7%E7%B1%BB"><span class="toc-number">2.3.</span> <span class="toc-text">
+          编写 MyBatis 工具类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%AE%9E%E4%BD%93%E7%B1%BB"><span class="toc-number">2.4.</span> <span class="toc-text">
+          创建实体类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E5%86%99Mapper%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.5.</span> <span class="toc-text">
+          编写Mapper接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E5%86%99UserMapper-xml%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">2.6.</span> <span class="toc-text">
+          编写UserMapper.xml配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E7%B1%BB"><span class="toc-number">2.7.</span> <span class="toc-text">
+          测试类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">2.8.</span> <span class="toc-text">
+          可能出现的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%BE%E4%B8%8D%E5%88%B0Mapper-xml%E6%96%87%E4%BB%B6"><span class="toc-number">2.8.1.</span> <span class="toc-text">
+          找不到Mapper.xml文件</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%87%A0%E4%B8%AA%E9%A1%B6%E7%BA%A7%E5%85%83%E7%B4%A0%E6%A0%87%E7%AD%BE"><span class="toc-number">3.</span> <span class="toc-text">
+          几个顶级元素标签</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#select%E3%80%81insert%E3%80%81update%E3%80%81delete%E6%A0%87%E7%AD%BE"><span class="toc-number">3.1.</span> <span class="toc-text">
+          select、insert、update、delete标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sql%E6%A0%87%E7%AD%BE"><span class="toc-number">3.2.</span> <span class="toc-text">
+          sql标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#resultMap%E6%A0%87%E7%AD%BE"><span class="toc-number">3.3.</span> <span class="toc-text">
+          resultMap标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#resultMap%E7%9A%84%E5%85%83%E7%B4%A0%E6%A0%87%E7%AD%BE%E7%9A%84%E5%B1%9E%E6%80%A7"><span class="toc-number">3.4.</span> <span class="toc-text">
+          resultMap的元素标签的属性</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="https://s1.ax1x.com/2022/10/20/x6VjoR.jpg" alt="avatar"></div><p class="sidebar-ov-author__text">I'm WorldmeQC</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1648203340&amp;site=qq&amp;menu=yes&quot;" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="https://github.com/worldmeqc" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">5</div><div class="sidebar-ov-state-item__name">归档</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">4</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">10</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2023</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>WorldmeQC</span></div></div><div id="aplayer"> <meting-js id="7551302646" server="netease" type="playlist" autoplay fixed="true" order="random" preload="auto" lrcType="1"></meting-js></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"><div class="search-btns">使用搜索：<span class="search-btns-item search-btns-item--google"><i class="fab fa-google"></i>谷歌</span><span class="search-btns-item search-btns-item--bing"><i></i>必应</span><span class="search-btns-item search-btns-item--baidu"><i></i>百度</span></div></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="120" alpha="0.6" zIndex="-1"></script><script src="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/js/social-share.min.js"></script><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.xml';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js"></script><script>window.addEventListener('DOMContentLoaded', function () {
+  var pjax = new Pjax({"selectors":["head title","#main",".pjax-reload"],"history":true,"scrollTo":false,"scrollRestoration":false,"cacheBust":false,"debug":false,"currentUrlFullReload":false,"timeout":0});
+  // 加载进度条的计时器
+  var loadingTimer = null;
+
+  // 重置页面 Y 方向上的滚动偏移量
+  document.addEventListener('pjax:send', function () {
+    $('.header-nav-menu').removeClass('show');
+    if (CONFIG.pjax && CONFIG.pjax.avoidBanner) {
+      $('html').velocity('scroll', {
+        duration: 500,
+        offset: $('#header').height(),
+        easing: 'easeInOutCubic'
+      });
+    }
+
+    var loadingBarWidth = 20;
+    var MAX_LOADING_WIDTH = 95;
+
+    $('.loading-bar').addClass('loading');
+    $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    clearInterval(loadingTimer);
+    loadingTimer = setInterval(function () {
+      loadingBarWidth += 3;
+      if (loadingBarWidth > MAX_LOADING_WIDTH) {
+        loadingBarWidth = MAX_LOADING_WIDTH;
+      }
+      $('.loading-bar__progress').css('width', loadingBarWidth + '%');
+    }, 500);
+  }, false);
+
+  window.addEventListener('pjax:complete', function () {
+    clearInterval(loadingTimer);
+    $('.loading-bar__progress').css('width', '100%');
+    $('.loading-bar').removeClass('loading');
+    setTimeout(function () {
+      $('.loading-bar__progress').css('width', '0');
+    }, 400);
+    $('link[rel=prefetch], script[data-pjax-rm]').each(function () {
+      $(this).remove();
+    });
+    $('script[data-pjax], #pjax-reload script').each(function () {
+      $(this).parent().append($(this).remove());
+    });
+
+    if (Stun.utils.pjaxReloadBoot) {
+      Stun.utils.pjaxReloadBoot();
+    }
+    if (Stun.utils.pjaxReloadScroll) {
+      Stun.utils.pjaxReloadScroll();
+    }
+    if (Stun.utils.pjaxReloadSidebar) {
+      Stun.utils.pjaxReloadSidebar();
+    }
+    if (false) {
+      if (Stun.utils.pjaxReloadHeader) {
+        Stun.utils.pjaxReloadHeader();
+      }
+      if (Stun.utils.pjaxReloadScrollIcon) {
+        Stun.utils.pjaxReloadScrollIcon();
+      }
+      if (Stun.utils.pjaxReloadLocalSearch) {
+        Stun.utils.pjaxReloadLocalSearch();
+      }
+    }
+  }, false);
+}, false);</script><div id="pjax-reload"></div><script src="/js/utils.js?v=2.7.0"></script><script src="/js/stun-boot.js?v=2.7.0"></script><script src="/js/scroll.js?v=2.7.0"></script><script src="/js/header.js?v=2.7.0"></script><script src="/js/aplayer.js?v=2.7.0"></script><script src="/js/sidebar.js?v=2.7.0"></script><script type="application/json" src="/search.xml"></script></body></html>
